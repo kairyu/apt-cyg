@@ -113,7 +113,12 @@ Copyright (c) 2005-9 Stephen Jungels
 +
 
 function wget {
-  if command wget -h &>/dev/null
+  command pacwget -h &>/dev/null
+  if [ $? -eq 1 ]
+  then
+    info pacwget is detected, using pacwget instead of wget
+    command pacwget "$@"
+  elif command wget -h &>/dev/null
   then
     command wget "$@"
   else
@@ -179,6 +184,10 @@ function check-packages {
     echo No packages found.
     return 1
   fi
+}
+
+function info {
+  printf '\e[1;32m%s\e[m\n' "$*" >&2
 }
 
 function warn {
